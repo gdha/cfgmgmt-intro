@@ -1,6 +1,8 @@
+.pat
 .vagrant
 .ansible
 .ssh
 .cache
 .sudo_as_admin_successful
 .bash_history
+*.retry
