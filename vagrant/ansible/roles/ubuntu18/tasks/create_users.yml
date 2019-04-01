@@ -1,0 +1,26 @@
+---
+# File: ansible/common/roles/rear-test/tasks/create_users.yml
+#
+# URL: https://raw.githubusercontent.com/msergiy87/ansible-create-users/master/create_users.yml
+
+- name: Generate password for vagrant
+  shell: python -c 'import crypt; print crypt.crypt("vagrant", "$1$SomeSalt$")'
+  register: genpass
+
+- name: Creating admin group
+  group: name=admin system=yes state=present
+
+- name: Creating vagrant user with admin access
+  user: name=vagrant password={{ genpass.stdout }} groups=admin shell=/bin/bash createhome=yes append=yes
+
+- name: Creating ansible group
+  group: name=ansible gid=10000 state=present
+
+- name: Creating ansible user (group ansible)
+  user: name=ansible password={{ genpass.stdout }} groups=ansible shell=/bin/bash createhome=yes append=yes
+
+- name: copy file sudoers.ansible to /etc/sudoers.d/ansible
+  copy: src=sudoers.ansible dest=/etc/sudoers.d/ansible owner=root group=root mode=0440
+
+- name: copy file sudoers to /etc/sudoers
+  copy: src=sudoers dest=/etc/sudoers owner=root group=root mode=0440

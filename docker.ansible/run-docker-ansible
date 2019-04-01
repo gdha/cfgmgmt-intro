@@ -1,0 +1,7 @@
+BASEDIR=/Users/gdha/data/projects/devops/cfgmgmt-intro
+docker run -it -v /var/run/docker.sock:/var/run/docker.sock \
+               -v $BASEDIR/ansible/playbooks:/home/ansible/playbooks \
+               -v $BASEDIR/docker.ansible/ansible.cfg:/home/ansible/ansible.cfg \
+               -v $BASEDIR/docker.ansible/inventory:/home/ansible/hosts \
+               -v $BASEDIR/docker.ansible/sudoers.ansible:/etc/sudoers.d/ansible \
+               ansible_docker

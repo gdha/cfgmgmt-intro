@@ -1,0 +1,7 @@
+[local]
+localhost ansible_connection=local
+
+[clients]
+client1		ansible_host=192.168.33.11
+client2		ansible_host=192.168.33.12
+client3		ansible_host=192.168.33.13

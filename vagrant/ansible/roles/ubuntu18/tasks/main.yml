@@ -1,0 +1,8 @@
+---
+# tasks file for ubuntu18
+
+# Add various helpful configuration files
+- name: Install the hosts file
+  copy: src=hosts dest=/etc/hosts mode=0644
+
+- include_tasks: create_users.yml

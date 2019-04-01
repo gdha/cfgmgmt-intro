@@ -1,0 +1,3 @@
+# Sudo file for ansible user
+Defaults:ansible !requiretty
+ansible ALL=(ALL) NOPASSWD: ALL

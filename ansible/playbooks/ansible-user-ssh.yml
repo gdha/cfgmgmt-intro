@@ -1,0 +1,14 @@
+---
+- name: Prepare the ansible user .ssh sub-directory
+  hosts: clients
+  gather_facts: false
+  vars:
+    username: ansible
+    groupname: ansible
+  tasks:
+
+    # Create for user ansible the .ssh directory
+    - name: Create /home/{{ username }}/.ssh (if required)
+      file: path=/home/{{ username }}/.ssh state=directory mode=0700 owner={{ username }} group={{ groupname }} recurse=yes
+    - name: Copy public ssh key to /home/{{ username }}/.ssh
+      copy: src=/home/{{ username }}/.ssh/id_rsa.pub dest=/home/{{ username }}/.ssh/authorized_keys mode=0744 owner={{ username }} group={{ groupname }}

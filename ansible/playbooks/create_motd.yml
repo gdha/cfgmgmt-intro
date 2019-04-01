@@ -1,0 +1,17 @@
+---
+- name: Create a message of the day file on the clients
+  hosts: clients
+  gather_facts: false
+  become: true
+  become_method: sudo
+  tasks:
+
+    # Check if /etc/motd already exists
+    - name: Check presence of /etc/motd
+      stat: path=/etc/motd
+      register: motd_exists
+
+    # Create the /etc/motd file
+    - name: Create /etc/motd
+      shell: echo "Welcome to {{ inventory_hostname }}" > /etc/motd
+      when: motd_exists.stat.exists == false
