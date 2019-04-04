@@ -1,11 +1,6 @@
 ## Sudoers allows particular users to run various commands as
 ## the root user, without needing the root password.
 ##
-## Examples are provided at the bottom of the file for collections
-## of related commands, which can then be delegated out to particular
-## users or groups.
-## 
-## This file must be edited with the 'visudo' command.
 
 # Defaults specification
 
@@ -50,25 +45,21 @@ Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
 ## Allow root to run any commands anywhere 
 root	ALL=(ALL) 	ALL
 
-## Allows members of the 'sys' group to run networking, software, 
-## service management apps and more.
-# %sys ALL = NETWORKING, SOFTWARE, SERVICES, STORAGE, DELEGATING, PROCESSES, LOCATE, DRIVERS
-
 ## Allows people in group wheel to run all commands
 # %wheel	ALL=(ALL)	ALL
 
 ## Same thing without a password
 %wheel	ALL=(ALL)	NOPASSWD: ALL
 
-## Allows members of the users group to mount and unmount the 
-## cdrom as root
-# %users  ALL=/sbin/mount /mnt/cdrom, /sbin/umount /mnt/cdrom
+# Allow members of group sudo to execute any command
+%sudo	ALL=(ALL:ALL) ALL
 
-## Allows members of the users group to shutdown this system
-# %users  localhost=/sbin/shutdown -h now
+# See sudoers(5) for more information on "#include" directives:
 
 ## Read drop-in files from /etc/sudoers.d (the # here does not mean a comment)
 #includedir /etc/sudoers.d
+vagrant ALL=(ALL) NOPASSWD: ALL
+
 Defaults    env_keep += "SSH_AUTH_SOCK"
 Defaults    !requiretty
 %admin ALL=NOPASSWD: ALL

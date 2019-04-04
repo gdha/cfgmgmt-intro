@@ -1,3 +1,4 @@
+nodes
 .pat
 .vagrant
 .ansible
@@ -6,3 +7,4 @@
 .sudo_as_admin_successful
 .bash_history
 *.retry
+NAME
