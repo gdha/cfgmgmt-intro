@@ -26,8 +26,6 @@ RUN apt-get update \
     ansible \
     sshpass \
     iputils-ping \
-    expect \
-    ksh \
     sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
