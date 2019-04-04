@@ -9,30 +9,33 @@ If you have questions or remarks mail at gratien . dhaese @ gmail . com
 - vagrant
 - Oracle VirtualBox
 - ChefDK
-- ansible
-- python
+- ansible (optional)
+- python (optional)
 - git (to clone this git repo: https://github.com/gdha/cfgmgmt-intro)
 
 ## Clone the Git repository for the examples
-- git clone https://github.com/gdha/cfgmgmt-intro.git
-- cd cfgmgmt-intro
+- `git clone https://github.com/gdha/cfgmgmt-intro.git`
+- go to directory `cfgmgmt-intro`
 
 ## Start of docker ansible_docker
 - go to directory `cfgmgmt-intro/docker.ansible`
 - run: `./build-docker-ansible`
 - run: `./run-docker-ansible`
-- (inside the container) run: ansible --version
+- (inside the container) run: `ansible --version`
 
 ## In another Bash shell windows (on your Linux or Mac)
 - go to directory `cfgmgmt-intro/vagrant`
 - run: `vagrant status`
+```
 Current machine states:
 
 client1                   not created (virtualbox)
 client2                   not created (virtualbox)
 client3                   not created (virtualbox)
+```
 
 - run: `vagrant up`
+
   Initial startup will perform a provisioning of the 3 client VMs. They will have an user "ansible" (with password "vagrant"). There is by default also an user called "vagrant" (with password "vagrant")
 
 - run: `vagrant status`
@@ -44,7 +47,7 @@ client2                   running (virtualbox)
 client3                   running (virtualbox)
 ```
 
-- (inside the container) run: cat /home/ansible/hosts
+- (inside the container) run: `cat /home/ansible/hosts`
 ```
 [local]
 localhost ansible_connection=local
@@ -55,11 +58,14 @@ client2		ansible_host=192.168.33.12
 client3		ansible_host=192.168.33.13
 ```
 
-- (inside the container) run: ansible-playbook playbooks/ansible-user-ssh.yml
-You will see errors like:
-fatal: [client3]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: Warning: Permanently added '192.168.33.13' (ECDSA) to the list of known hosts.\r\nansible@192.168.33.13: Permission denied (publickey,password).\r\n", "unreachable": true}
+- (inside the container) run: `ansible-playbook playbooks/ansible-user-ssh.yml`
 
-- (inside the container) run: ansible-playbook -k playbooks/ansible-user-ssh.yml
+You will see errors like:
+```
+fatal: [client3]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: Warning: Permanently added '192.168.33.13' (ECDSA) to the list of known hosts.\r\nansible@192.168.33.13: Permission denied (publickey,password).\r\n", "unreachable": true}
+```
+
+- (inside the container) run: `ansible-playbook -k playbooks/ansible-user-ssh.yml`
 ```
 $ ansible-playbook -k playbooks/ansible-user-ssh.yml 
 SSH password: 
@@ -82,7 +88,7 @@ client2                    : ok=2    changed=2    unreachable=0    failed=0
 client3                    : ok=2    changed=2    unreachable=0    failed=0
 ```
 
-- (inside the container) run: ansible clients -b -a "cat /etc/sudoers.d/ansible"
+- (inside the container) run: `ansible clients -b -a "cat /etc/sudoers.d/ansible"`
 ```
 $ ansible clients -b -a "cat /etc/sudoers.d/ansible"
 client1 | SUCCESS | rc=0 >>
@@ -98,17 +104,17 @@ Defaults    !requiretty
 ansible ALL=(ALL) NOPASSWD:ALL
 ```
 
-- (inside the container) run: ansible localhost -m setup
+- (inside the container) run: `ansible localhost -m setup`
 
-- (inside the container) run: ansible clients -b -m shell -a "journalctl | tail -5"
+- (inside the container) run: `ansible clients -b -m shell -a "journalctl | tail -5"`
 
-- (inside the container) run: ansible clients -b -m file -a "path=/etc/motd state=absent"
+- (inside the container) run: `ansible clients -b -m file -a "path=/etc/motd state=absent"`
 
-- (inside the container) run: ansible-playbook playbooks/create_motd.yml
+- (inside the container) run: `ansible-playbook playbooks/create_motd.yml`
 
 ## Simple Chef resources
 - (on Mac) run: go to directory `cfgmgmt-intro/chef`
-- (on Mac) run: chef-client -z hello.rb
+- (on Mac) run: `chef-client -z hello.rb`
 ```
 [2019-04-04T10:49:43+02:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 14.8.12
@@ -132,7 +138,7 @@ Running handlers complete
 Chef Client finished, 1/1 resources updated in 15 seconds
 ```
 
-- (on Mac) run: chef-client -z hello.rb (run same command again to proof idempotency)
+- (on Mac) run: `chef-client -z hello.rb` (run same command again to proof idempotency)
 ```
 [2019-04-04T10:53:32+02:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 14.8.12
@@ -150,16 +156,16 @@ Running handlers complete
 Chef Client finished, 0/1 resources updated in 12 seconds
 ```
 
-- (on Mac) run: cat tree.rb
+- (on Mac) run: `cat tree.rb`
 ``` 
 package 'tree' do
   action :install
 end
 ```
 
-- (on Mac) run: [[ ! -d cookbooks ]] && mkdir cookbooks
-- (on Mac) run: chef generate cookbook cookbooks/NAME
-- (on Mac) run: tree cookbooks/NAME/
+- (on Mac) run: `[[ ! -d cookbooks ]] && mkdir cookbooks`
+- (on Mac) run: `chef generate cookbook cookbooks/NAME`
+- (on Mac) run: `tree cookbooks/NAME`
 ```
 cookbooks/NAME/
 |-- Berksfile
@@ -184,41 +190,41 @@ cookbooks/NAME/
 ```
 
 ## Demonstrate Vagrant with Kitchen Test
-- go to directory cfgmgmt-intro/chef/cookbooks/nginx_test
+- go to directory `cfgmgmt-intro/chef/cookbooks/nginx_test`
 
-- (on Mac) run: cat recipes/default.rb
+- (on Mac) run: `cat recipes/default.rb`
 
-- (on Mac) run: cat kitchen.yml
+- (on Mac) run: `cat kitchen.yml`
 
-- (on Mac) run: kitchen list
+- (on Mac) run: `kitchen list`
 ```
 Instance           Driver   Provisioner  Verifier  Transport  Last Action    Last Error
 default-centos-76  Vagrant  ChefZero     Inspec    Ssh        <Not Created>  <None>
 ```
 
-- (on Mac) run: kitchen create
+- (on Mac) run: `kitchen create`
 
-- (on Mac) run: kitchen converge
+- (on Mac) run: `kitchen converge`
 
-- (on Mac) run: kitchen verify
+- (on Mac) run: `kitchen verify`
 ```
 Profile Summary: 27 successful controls, 26 control failures, 1 control skipped
 Test Summary: 86 successful, 44 failures, 1 skipped
 ```
 
-- (on Mac) run: vi recipes/default.rb
+- (on Mac) run: `vi recipes/default.rb`
 
-    uncomment line: # include_recipe 'os-hardening'
+    uncomment line: `# include_recipe 'os-hardening'`
 
-- (on Mac) run: kitchen converge
+- (on Mac) run: `kitchen converge`
 
-- (on Mac) run: kitchen verify
+- (on Mac) run: `kitchen verify`
 ```
 Profile Summary: 52 successful controls, 1 control failure, 1 control skipped
 Test Summary: 129 successful, 1 failure, 1 skipped
 ```
 
-- (on Mac) run: kitchen destroy
+- (on Mac) run: `kitchen destroy`
 
 ## LICENSE
 
